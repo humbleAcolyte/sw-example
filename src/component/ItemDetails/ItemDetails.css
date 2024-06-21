@@ -1,0 +1,15 @@
+.item-details {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+}
+
+img {
+	border-radius: 8px;
+	max-height: 60%;
+	width: auto;
+}
+
+ul {
+	list-style-type: none;
+}

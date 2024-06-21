@@ -1,49 +1,31 @@
-import React, { Component } from 'react';
+import React from "react";
+import PropTypes from "prop-types";
 
-import SwapiService from '../../service/SwapiService';
-import Spinner from '../Spinner';
+const ItemList = (props) => {
+  const { data, onItemSelected, children: renderLabel } = props;
 
-export default class ItemList extends Component {
+  const items = data.map((item) => {
+    const { id } = item;
+    const label = renderLabel(item);
 
-    state = {
-        itemList: null
-    };
+    return (
+      <li key={id} onClick={() => onItemSelected(id)}>
+        {label}
+      </li>
+    );
+  });
 
-    componentDidMount() {
-        const { getData } = this.props;
-
-        getData()
-            .then((itemList) => {
-                this.setState({
-                    itemList
-                });
-            });
-    }
-
-    renderItems(items) {
-        return items.map(({id, name}) => {
-            return (
-                <li key={id}
-                    onClick={() => this.props.onItemSelected(id)}>
-                    {name}
-                </li>
-            );
-        });
-    }
-
-    render() {
-        const { itemList } = this.state;
-
-        if (!itemList) {
-            return <Spinner />;
-        }
-
-        const items = this.renderItems(itemList);
-
-        return (
-            <ul>
-                {items}
-            </ul>
-        );
-    }
+  return <ul>{items}</ul>;
 };
+
+ItemList.defaultProps = {
+  onItemSelected: () => {},
+};
+
+ItemList.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onItemSelected: PropTypes.func,
+  children: PropTypes.func.isRequired,
+};
+
+export default ItemList;

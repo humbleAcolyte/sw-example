@@ -1,0 +1,6 @@
+.list-block {
+	width: 100%;
+	display: flex;
+	direction: row;
+	justify-content: space-around;
+}

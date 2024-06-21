@@ -9,7 +9,7 @@ export default class Header extends Component {
     render() {
         return (
             <div className='header'>
-                <h1>Star DB</h1>
+                <h1>SW Example</h1>
                 <div className='header-menu'>
                     <button className='header-menu-button'>People</button>
                     <ErrorButton />

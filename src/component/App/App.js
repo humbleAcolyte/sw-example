@@ -1,36 +1,40 @@
 import React, { Component } from 'react';
 
+import ErrorBoundary from '../ErrorBoundary';
+import SwapiService from '../../service/SwapiService';
+import { SwapiServiceProvider } from '../SwService';
+
 import Header from '../Header';
 import RandomPlanet from '../RandomPlanet';
-import PeoplePage from '../PeoplePage';
-import ErrorIndicator from '../ErrorIndicator';
+import { PeoplePage } from '../Pages';
 
 import './App.css';
 
-
 export default class App extends Component {
+  state = {
+    showRandomPlanet: false,
+    swapiService: new SwapiService()
+  };
 
-    state = {
-        hasError: false
-    };
+  onServiceChange = () => {
+    // TO-DO
+  }
 
-    componentDidCatch() {
-        this.setState({
-            hasError: true
-        });
-    }
+  render() {
+    const planet = this.state.showRandomPlanet ?
+      <RandomPlanet /> :
+      null;
 
-    render() {
-        if (this.state.hasError) {
-            return <ErrorIndicator />;
-        }
-
-        return (
-            <div className='app'>
-                <Header />
-                <RandomPlanet />
-                <PeoplePage />
-            </div>
-        );
-    }
+    return (
+      <div className='app'>
+      	<ErrorBoundary>
+	      	<SwapiServiceProvider value={ this.state.swapiService }>
+	          <Header />
+	          {planet}
+	          <PeoplePage />
+	        </SwapiServiceProvider>
+        </ErrorBoundary>
+      </div>
+    );
+  }
 };
