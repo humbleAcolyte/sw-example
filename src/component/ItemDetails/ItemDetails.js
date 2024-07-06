@@ -1,73 +1,44 @@
-import React, { Component } from 'react';
+import React, { useState } from "react";
 
-import './ItemDetails.css';
-
-import SwapiService from '../../service/SwapiService';
+import "./ItemDetails.css";
 
 const Record = ({ item, field, label }) => {
-    return (
-        <li>
-            <span>{ label }</span>
-            <span>{ item[field] }</span>
-        </li>
-    );
+  return (
+    <li>
+      <span>{label}</span>
+      <span>{item[field]}</span>
+    </li>
+  );
 };
 
-export {
-    Record
-};
+export { Record };
 
-export default class ItemDetails extends Component {
+export default function ItemDetails(props) {
+  const { itemId, getData, getImageUrl } = props;
+  const [item, setItem] = useState(null);
+  const [image, setImage] = useState(null);
 
-    swapiService = new SwapiService();
+  if (!itemId) {
+    return <span>Select from a list</span>;
+  }
 
-    state = {
-        item: null,
-        image: null
-    };
+  getData(itemId).then((item) => {
+    setItem(item);
+    setImage(getImageUrl(item));
+  });
 
-    componentDidMount() {
-        this.updateItem();
-    }
+  if (!item) {
+    return <span>Select from a list</span>;
+  }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.itemId !== prevProps.itemId) {
-            this.updateItem();
-        }
-    }
-
-    updateItem() {
-        const { itemId, getData, getImageUrl } = this.props;
-        if (!itemId) {
-            return;
-        }
-
-        getData(itemId)
-            .then((item) => this.setState({
-                item,
-                image: getImageUrl(item)
-            }));
-    }
-
-    render() {
-        if (!this.state.item) {
-            return <span>Select from a list</span>
-        }
-
-        const { item, image } = this.state;
-
-        return (
-            <div className="item-details">
-                <img src={image}
-                     alt='image'/>
-                <ul>
-                    {
-                        React.Children.map(this.props.children, (child) => {
-                            return React.cloneElement(child, { item });
-                        })
-                    }
-                </ul>
-            </div>
-        )
-    };
-};
+  return (
+    <div className="item-details">
+      <img src={image} alt="image" />
+      <ul>
+        {React.Children.map(props.children, (child) => {
+          return React.cloneElement(child, { item });
+        })}
+      </ul>
+    </div>
+  );
+}

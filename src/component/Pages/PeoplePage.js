@@ -1,35 +1,20 @@
-import React, { Component } from 'react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import ListBlock from '../ListBlock';
-import { PersonList, PersonDetails } from '../SwComponents';
+import ListBlock from "../ListBlock";
+import { PersonList, PersonDetails } from "../SwComponents";
 
-import './PeoplePage.css';
+const PeoplePage = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-export default class PeoplePage extends Component {
-
-    state = {
-        selectedItem: null
-    };
-
-    onPersonSelected = (id) => {
-        this.setState({
-            selectedItem: id
-        });
-    };
-
-    render() {
-        const list = (
-            <PersonList onItemSelected={this.onPersonSelected} />
-        );
-
-        const details = (
-            <PersonDetails itemId={ this.state.selectedItem } />
-        );
-
-        return (
-          <ListBlock list={list}
-                     details={details}
-          />
-        );
-    }
+  return (
+    <ListBlock
+      list={<PersonList onItemSelected={(id) => navigate(id)} />}
+      details={<PersonDetails itemId={id} />}
+    />
+  );
 };
+
+export default PeoplePage;
